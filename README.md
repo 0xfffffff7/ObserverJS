@@ -9,7 +9,7 @@ javascript generic object observer.
     <script type="text/javascript" src="Observer.js"></script>
 
     // SomeObject.
-    var Object = {...};
+    var SomeObject = {...};
 
     // YourReceiver.
     var YourReceiver = {...};
