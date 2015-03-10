@@ -1,6 +1,8 @@
 # ObserverJS
 javascript generic object observer.  
   
+![image](Obsever.png)
+  
   
 # How to  
   
