@@ -1,11 +1,11 @@
 var Observable = {
 
 
-	// ƒCƒxƒ“ƒgƒ^ƒCƒv.
+	// ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ãƒªã‚¹ãƒˆ.
 	subscribers: {},
 
 
-	// ƒCƒxƒ“ƒgw“Ç.
+	// ã‚¤ãƒ™ãƒ³ãƒˆè³¼èª­.
 	subscribe: function (fn, type){
 
 		if(typeof this.subscribers[type] === "undefined"){
@@ -17,7 +17,7 @@ var Observable = {
 	},
 
 
-	// ƒCƒxƒ“ƒgƒ^ƒCƒv•Ê‚É“o˜^‚³‚ê‚½ƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh‚ÌƒŠƒXƒg.
+	// ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒ—åˆ¥ã«ç™»éŒ²ã•ã‚ŒãŸã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒªã‚¹ãƒˆ.
 	getSubscription: function(type){
 		if(typeof this.subscribers[type] === "undefined"){
 			return [];
@@ -27,11 +27,11 @@ var Observable = {
 	},
 
 
-	// w“Ç‰ğœ.
+	// è³¼èª­è§£é™¤.
 	unsubscribe: function(fn, type){
 
 		// Get Subscriber
-		functions = getSubscription(type);
+		functions = this.getSubscription(type);
 
 		var i, max = functions.length;
 		for(i =0; i < max; i += 1){
@@ -42,19 +42,19 @@ var Observable = {
 	},
 
 
-	// ƒCƒxƒ“ƒg”­‰Î.
+	// ã‚¤ãƒ™ãƒ³ãƒˆç™ºç«.
 	ignition: function(type){
 
 		functions = this.getSubscription(type);
 
 		var i, max = functions.length;
 		for(i =0; i < max; i += 1){
-			functions[i]();
+			functions[i].apply(this, arguments);
 		}
 	},
 
 
-	// ‚ ‚éƒIƒuƒWƒFƒNƒg‚ğƒIƒuƒU[ƒo[‚Ö¸Ši‚³‚¹‚é
+	// ã‚ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚ªãƒ–ã‚¶ãƒ¼ãƒãƒ¼ã¸æ˜‡æ ¼ã•ã›ã‚‹
 	toObservable: function(eventor){
 
 		eventor.subscribers = [];
@@ -62,30 +62,33 @@ var Observable = {
 
 		var i;
 
-		// ‘S‚Ä‚Ìƒƒ“ƒo‚ğŠg’£‚µ‚ÄƒR[ƒ‹ƒoƒbƒN‚ğ’Ç‰Á‚·‚é.
+		// å…¨ã¦ã®ãƒ¡ãƒ³ãƒã‚’æ‹¡å¼µã—ã¦ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’è¿½åŠ ã™ã‚‹.
 		for(i in eventor){
 
 			if(eventor.hasOwnProperty(i) && typeof eventor[i] === "function" && i !=='ignition'){
 
-				// ƒI[ƒo[ƒ‰ƒCƒh.
+				// ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰.
+				// å³æ™‚é–¢æ•°ã§åŒ…æ‹¬ã™ã‚‹ã“ã¨ã§ãã®æ™‚ç‚¹ã®ãƒ¡ãƒ¢ãƒªã‚’ã‚­ãƒ£ãƒ—ãƒãƒ£ã™ã‚‹
 				eventor[i] = (function(){
 
 					var originalFunc = eventor[i];
 					var originalFuncName = i;
 
+					// å®Ÿè¡Œã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å®šç¾©ã—ãŸãƒ¡ã‚½ãƒƒãƒ‰.
 					return  function(){
-
-						// ƒIƒŠƒWƒiƒ‹‚ğŒÄ‚Ô.
-						originalFunc.apply(this, arguments);
 	
-						// ƒCƒxƒ“ƒg‚ğ”­‰Î‚·‚é.
-						eventor.ignition(originalFuncName);
+						// ã‚ªãƒªã‚¸ãƒŠãƒ«ã‚’å‘¼ã³ã€ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºç«ã™ã‚‹.
+						// ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã®å¼•æ•°ã«ã¯æ¬¡ã®ã‚‚ã®ã‚’æ¸¡ã™
+						// 0 -> ã‚ªãƒªã‚¸ãƒŠãƒ«ã®ãƒ¡ã‚½ãƒƒãƒ‰
+						// 1 -> ã‚ªãƒªã‚¸ãƒŠãƒ«ãƒ¡ã‚½ãƒƒãƒ‰ã®argumentsãƒªã‚¹ãƒˆ
+						// 2 -> ã‚ªãƒªã‚¸ãƒŠãƒ«ãƒ¡ã‚½ãƒƒãƒ‰ã®å®Ÿè¡Œçµæœ
+						eventor.ignition(originalFuncName, arguments, originalFunc.apply(this, arguments));
 					};
 				})();
 			}
 		}
 
-		// ƒIƒuƒU[ƒo[‚Ì‹@”\‚ğ‘S‚ÄŒp³‚³‚¹‚é.(‚½‚¾‚µ‚±‚Ìƒƒ\ƒbƒh©g‚ÍœŠO)
+		// ã‚ªãƒ–ã‚¶ãƒ¼ãƒãƒ¼ã®æ©Ÿèƒ½ã‚’å…¨ã¦ç¶™æ‰¿ã•ã›ã‚‹.(ãŸã ã—ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰è‡ªèº«ã¯é™¤å¤–)
 		for(i in Observable){
 			if(Observable.hasOwnProperty(i) && typeof Observable[i] === "function" && i !== 'toObservable'){
 				eventor[i] = Observable[i];

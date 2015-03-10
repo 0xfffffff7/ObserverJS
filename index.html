@@ -8,7 +8,7 @@
 
 <script>
 
-// ‚ ‚éƒCƒxƒ“ƒg”­sÒ.
+// ã‚ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆç™ºè¡Œè€….
 var SomeEventor = {
 	eventFuncA: function(){
 		console.log("Do eventFuncA!!");
@@ -18,16 +18,17 @@ var SomeEventor = {
 	},
 	eventFuncC: function(arg1,arg2){
 		console.log("Do eventFuncC!!" + " arg1= " + arg1 + " arg2= " + arg2);
+		return "RET_STRING";
 	}
 };
 
 
-// ƒCƒxƒ“ƒg”­sÒ‚ğƒIƒuƒU[ƒo[‚Ö¸Ši
+// ã‚¤ãƒ™ãƒ³ãƒˆç™ºè¡Œè€…ã‚’ã‚ªãƒ–ã‚¶ãƒ¼ãƒãƒ¼ã¸æ˜‡æ ¼
 Observable.toObservable(SomeEventor);
 
 
 
-// ’Ê’m‚ğó‚¯æ‚è‚½‚¢l
+// é€šçŸ¥ã‚’å—ã‘å–ã‚ŠãŸã„äºº
 var SomeReceiver = {
 	myFuncA: function(){
 		console.log('call myFuncA!!');
@@ -37,11 +38,12 @@ var SomeReceiver = {
 	},
 	myFuncC: function(){
 		console.log('call myFuncC!!');
+		console.log(arguments);
 	}
 };
 
 
-// w“Ç“o˜^.
+// è³¼èª­ç™»éŒ².
 SomeEventor.subscribe(SomeReceiver.myFuncA, 'eventFuncA');
 SomeEventor.subscribe(SomeReceiver.myFuncB, 'eventFuncB');
 SomeEventor.subscribe(SomeReceiver.myFuncC, 'eventFuncC');
@@ -49,6 +51,11 @@ SomeEventor.subscribe(SomeReceiver.myFuncC, 'eventFuncC');
 
 SomeEventor.eventFuncA();
 SomeEventor.eventFuncB();
+SomeEventor.eventFuncC("AAA", "BBB");
+
+// è³¼èª­è§£é™¤.
+SomeEventor.unsubscribe(SomeReceiver.myFuncC, 'eventFuncC');
+// è§£é™¤ç¢ºèª
 SomeEventor.eventFuncC("AAA", "BBB");
 
 </script>

@@ -12,7 +12,9 @@ javascript generic object observer.
     var SomeObject = {...};
 
     // YourReceiver.
-    var YourReceiver = {...};
+    var YourReceiver = { 
+        CallbackFunc : function(){};
+    };
 
     
     // Promotion to Observer.
@@ -20,9 +22,22 @@ javascript generic object observer.
     
 
     // subscribe.
-    SomeObject.subscribe(YourReceiver.YourFunc, 'SomeObjectEventFunc');
+    SomeObject.subscribe(YourReceiver.CallbackFunc, 'SomeObjectEventFunc');
     
     
 	// Ignition!.
     SomeObject.SomeObjectEventFunc();
+  
+  
+# CallbackFunc Augments
+  
+  0 -> EventMethod  
+  1 -> EventMethod Augments  
+  2 -> EventMethod Result  
+  
+    CallbackFunc: function(){
+        console.log(arguments);
+    }
+  
+  console output -> ["eventFuncC", Arguments[2], "RET_STRING"]  
 
