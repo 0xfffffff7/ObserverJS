@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="Observer.js"></script>
+</head>
+
+<body>
+
+<script>
+
+// あるイベント発行者.
+var SomeEventor = {
+	eventFuncA: function(){
+		console.log("Do eventFuncA!!");
+	},
+	eventFuncB: function(){
+		console.log("Do eventFuncB!!");
+	},
+	eventFuncC: function(arg1,arg2){
+		console.log("Do eventFuncC!!" + " arg1= " + arg1 + " arg2= " + arg2);
+	}
+};
+
+
+// イベント発行者をオブザーバーへ昇格
+Observable.toObservable(SomeEventor);
+
+
+
+// 通知を受け取りたい人
+var SomeReceiver = {
+	myFuncA: function(){
+		console.log('call myFuncA!!');
+	},
+	myFuncB: function(){
+		console.log('call myFuncB!!');
+	},
+	myFuncC: function(){
+		console.log('call myFuncC!!');
+	}
+};
+
+
+// 購読登録.
+SomeEventor.subscribe(SomeReceiver.myFuncA, 'eventFuncA');
+SomeEventor.subscribe(SomeReceiver.myFuncB, 'eventFuncB');
+SomeEventor.subscribe(SomeReceiver.myFuncC, 'eventFuncC');
+
+
+SomeEventor.eventFuncA();
+SomeEventor.eventFuncB();
+SomeEventor.eventFuncC("AAA", "BBB");
+
+</script>
+
+</body>
+</html>

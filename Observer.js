@@ -1,0 +1,96 @@
+var Observable = {
+
+
+	// イベントタイプ.
+	subscribers: {},
+
+
+	// イベント購読.
+	subscribe: function (fn, type){
+
+		if(typeof this.subscribers[type] === "undefined"){
+			this.subscribers[type] = [];
+		}
+
+		// Regist Callback Method.
+		this.subscribers[type].push(fn);
+	},
+
+
+	// イベントタイプ別に登録されたコールバックメソッドのリスト.
+	getSubscription: function(type){
+		if(typeof this.subscribers[type] === "undefined"){
+			return [];
+		}else{
+			return this.subscribers[type];
+		}
+	},
+
+
+	// 購読解除.
+	unsubscribe: function(fn, type){
+
+		// Get Subscriber
+		functions = getSubscription(type);
+
+		var i, max = functions.length;
+		for(i =0; i < max; i += 1){
+			if(functions[i] === fn){
+				functions.splice(i, 1);
+			}
+		}
+	},
+
+
+	// イベント発火.
+	fire: function(type){
+
+		functions = this.getSubscription(type);
+
+		var i, max = functions.length;
+		for(i =0; i < max; i += 1){
+			functions[i]();
+		}
+	},
+
+
+	// あるオブジェクトをオブザーバーへ昇格させる
+	toObservable: function(eventor){
+
+		eventor.subscribers = [];
+		eventor.fire = function(){};
+
+		var i;
+
+		// 全てのメンバを拡張してコールバックを追加する.
+		for(i in eventor){
+
+			if(eventor.hasOwnProperty(i) && typeof eventor[i] === "function" && i !=='fire'){
+
+				// オーバーライド.
+				eventor[i] = (function(){
+
+					var originalFunc = eventor[i];
+					var originalFuncName = i;
+
+					return  function(){
+
+						// オリジナルを呼ぶ.
+						originalFunc.apply(this, arguments);
+	
+						// イベントを発火する.
+						eventor.fire(originalFuncName);
+					};
+				})();
+			}
+		}
+
+		// オブザーバーの機能を全て継承させる.(ただしこのメソッド自身は除外)
+		for(i in Observable){
+			if(Observable.hasOwnProperty(i) && typeof Observable[i] === "function" && i !== 'toObservable'){
+				eventor[i] = Observable[i];
+			}
+		}
+	}
+};
+
