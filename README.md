@@ -39,5 +39,5 @@ javascript generic object observer.
         console.log(arguments);
     }
   
-  console output -> ["eventFuncC", Arguments[2], "RET_STRING"]  
+  console output -> ["SomeObjectEventFunc", Arguments[2], "RESULT_OBJECT"]  
 
