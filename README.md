@@ -21,6 +21,6 @@ javascript generic object observer.
     SomeObject.subscribe(YourReceiver.YourFunc, 'SomeObjectEventFunc');
     
     
-	// Fire!.
+	// Ignition!.
     SomeObject.SomeObjectEventFunc();
 

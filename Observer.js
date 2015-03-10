@@ -43,7 +43,7 @@ var Observable = {
 
 
 	// イベント発火.
-	fire: function(type){
+	ignition: function(type){
 
 		functions = this.getSubscription(type);
 
@@ -58,14 +58,14 @@ var Observable = {
 	toObservable: function(eventor){
 
 		eventor.subscribers = [];
-		eventor.fire = function(){};
+		eventor.ignition = function(){};
 
 		var i;
 
 		// 全てのメンバを拡張してコールバックを追加する.
 		for(i in eventor){
 
-			if(eventor.hasOwnProperty(i) && typeof eventor[i] === "function" && i !=='fire'){
+			if(eventor.hasOwnProperty(i) && typeof eventor[i] === "function" && i !=='ignition'){
 
 				// オーバーライド.
 				eventor[i] = (function(){
@@ -79,7 +79,7 @@ var Observable = {
 						originalFunc.apply(this, arguments);
 	
 						// イベントを発火する.
-						eventor.fire(originalFuncName);
+						eventor.ignition(originalFuncName);
 					};
 				})();
 			}
